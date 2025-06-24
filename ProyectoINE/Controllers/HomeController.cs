@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ProyectoINE.Models;
+using ProyectoINE.Models.ViewModels;
 using System.Diagnostics;
 
 namespace ProyectoINE.Controllers
@@ -13,9 +15,16 @@ namespace ProyectoINE.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            // Creamos el modelo para enviar a la vista
+            var model = new TipoViewModel
+            {
+                Items = ObtenerTiposDeDepr()
+            };
+
+            return View(model);
         }
 
         public IActionResult Privacy()
@@ -27,6 +36,19 @@ namespace ProyectoINE.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        // Método para obtener los tipos de depreciación
+        private List<SelectListItem> ObtenerTiposDeDepr()
+        {
+            return new List<SelectListItem>
+        {
+            new SelectListItem { Value = "1", Text = "Evaluar método óptimo" },
+            new SelectListItem { Value = "2", Text = "Linea Recta" },
+            new SelectListItem { Value = "3", Text= "Saldo Decreciente" },
+            new SelectListItem { Value = "4", Text = "Digitos de los años" },
+            new SelectListItem { Value = "5", Text = "Unidades de producción" }
+        };
         }
     }
 }

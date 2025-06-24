@@ -1,8 +1,69 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using ProyectoINE.Models.ViewModels
+@model TipoViewModel
+@{
+    ViewData["Title"] = "Depreciación"; 
+    ViewData["Description"] = "Calculadora de depreciación de activos.";
+    ViewData["Favicon"] = "/Yoshis_Egg.ico";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h1>Calculadora de depreciación de activos</h1>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form>
+            <div asp-validation-summary="ModelOnly" class="text-danger">
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CostoInicial"></label>
+                <input asp-for="CostoInicial" class="form-control" />
+                <span asp-validation-for="CostoInicial" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ValorResidual"></label>
+                <input asp-for="ValorResidual" class="form-control" />
+                <span asp-validation-for="ValorResidual" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="VidaUtilAnios"></label>
+                <input asp-for="VidaUtilAnios" class="form-control" />
+                <span asp-validation-for="VidaUtilAnios" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TasaUso"></label>
+                <input asp-for="TasaUso" class="form-control" />
+                <span asp-validation-for="TasaUso" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ImpactoFiscal"></label>
+                <input asp-for="ImpactoFiscal" class="form-control" />
+                <span asp-validation-for="ImpactoFiscal" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SelectedValue" class="control-label"></label>
+                <select asp-for="SelectedValue" class="form-control" asp-items="Model.Items">
+                    <option value="">Seleccione el tipo de depreciación</option>
+                </select>
+                <span asp-validation-for="SelectedValue" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Calcular" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
