@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProyectoINE.Models.ViewModels
@@ -20,7 +22,7 @@ namespace ProyectoINE.Models.ViewModels
         public int VidaUtilAnios { get; set; }
 
         [Display(Name = "Tasa de uso del activo (%)")]
-        [Range(1, 100, ErrorMessage = "Debe estar entre 1 y 100")]
+        [Range(0, 100, ErrorMessage = "Debe estar entre 1 y 100")]
         public int TasaUso { get; set; }
 
         [Display(Name = "Impacto fiscal (%)")]
@@ -32,7 +34,8 @@ namespace ProyectoINE.Models.ViewModels
         [Display(Name = "Tipo de depreciación")]
         [Required(ErrorMessage = "Debe seleccionar un tipo de activo")]
         public int? SelectedValue { get; set; }
-        [Display(Name = "Tipos")]
+        [BindNever]
+        [ValidateNever]
         public List<SelectListItem> Items { get; set; }
     }
 }
