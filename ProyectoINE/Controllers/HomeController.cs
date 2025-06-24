@@ -28,6 +28,71 @@ namespace ProyectoINE.Controllers
             return View(model);
         }
 
+        // Método para manejar el envío del formulario desde la vista
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Calcular(TipoViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                foreach (var entry in ModelState)
+                {
+                    foreach (var error in entry.Value.Errors)
+                    {
+                        Debug.WriteLine($"Error en '{entry.Key}': {error.ErrorMessage}");
+                    }
+                }
+                // Si el modelo no es válido, volvemos a mostrar la vista con los errores
+                model.Items = ObtenerTiposDeDepr();
+                return View("Index", model);
+            }
+
+            object modeloResultado;
+            string vistaDestino;
+
+            // Redirigimos al método elegido
+            switch (model.SelectedValue)
+            {
+                /*case 1:
+                      // Evaluar el método óptimo
+                      break;*/
+                /* case 2:
+                     // Método de línea recta
+                     break;*/
+                case 3:
+                    Debug.WriteLine("Método de saldos decrecientes");
+
+                    var decreciente = new DecreController();
+                    modeloResultado = decreciente.Calcular(model);
+                    vistaDestino = "SaldoDecrecienteTable";
+                    break;
+                /*case 4:
+                    // Método de suma de los dígitos de los años
+                    break;
+                case 5:
+                    // Método de unidades de producción
+                    break;
+                case 6:
+                    // Método de evaluación fiscal
+                    
+                    break;
+                case 7:
+                    // Método de evaluación contable
+                    break;*/
+
+                default:
+                    model.Items = ObtenerTiposDeDepr();
+                    return View("Index", model);
+            }
+
+            /* Referebcua oara evaluación fiscal y contable
+            var decreciente2 = new DecreController();
+            double[] decimalArr = decreciente2.CalcularDepreciaciones(model);
+            this.CalcularDesviacionEstandarMasBaja(decimalArr, decimalArr, decimalArr, decimalArr);*/
+
+            return View(vistaDestino, modeloResultado);
+        }
+
         public IActionResult Privacy()
         {
             return View();
@@ -91,11 +156,13 @@ namespace ProyectoINE.Controllers
         {
             return new List<SelectListItem>
         {
-            new SelectListItem { Value = "1", Text = "Evaluar m�todo �ptimo" },
+            new SelectListItem { Value = "1", Text = "Evaluar metodo optimo" },
             new SelectListItem { Value = "2", Text = "Linea Recta" },
-            new SelectListItem { Value = "3", Text= "Saldo Decreciente" },
-            new SelectListItem { Value = "4", Text = "Digitos de los a�os" },
-            new SelectListItem { Value = "5", Text = "Unidades de producci�n" }
+            new SelectListItem { Value = "3", Text = "Saldo Decreciente" },
+            new SelectListItem { Value = "4", Text = "Digitos de los anios" },
+            new SelectListItem { Value = "5", Text = "Unidades de produccion" },
+            new SelectListItem { Value = "6", Text = "Evaluacion Fiscal" },
+            new SelectListItem { Value = "7", Text = "Evaluacion contable" }
         };
         }
     }
