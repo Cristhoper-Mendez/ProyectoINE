@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ProyectoINE.Models;
 using ProyectoINE.Services;
+using ProyectoINE.Models.ViewModels;
+
 
 namespace ProyectoINE.Controllers
 {
