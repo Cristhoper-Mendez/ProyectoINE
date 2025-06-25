@@ -56,12 +56,14 @@ namespace ProyectoINE.Controllers
                 /*case 1:
                       // Evaluar el método óptimo
                       break;*/
-                /* case 2:
-                     // Método de línea recta
-                     break;*/
+                case 2:
+                    // Método de línea recta
+                    var lrecta = new LineaRectaController();
+                    modeloResultado = lrecta.Calcular(model);
+                    vistaDestino = "LineaRectaTable";
+                    break;
                 case 3:
-                    Debug.WriteLine("Método de saldos decrecientes");
-
+                    // Método de saldos decrecientes
                     var decreciente = new DecreController();
                     modeloResultado = decreciente.Calcular(model);
                     vistaDestino = "SaldoDecrecienteTable";
