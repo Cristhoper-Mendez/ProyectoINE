@@ -1,40 +1,63 @@
 using Microsoft.AspNetCore.Mvc;
-using ProyectoINE.Models;
+using ProyectoINE.Models.ViewModels;
 
 namespace ProyectoINE.Controllers
 {
     public class LineaRectaController : Controller
     {
-        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Index(DatosLineaRecta datos)
+        public ResultadoLineaRectaViewModel Calcular(TipoViewModel model)
         {
-            if (datos.N <= 0 || datos.k <= 0 || datos.k > datos.N)
+            var resultado = new ResultadoLineaRectaViewModel();
+
+            decimal costoInicial = model.CostoInicial;
+            int vidaUtil = model.VidaUtilAnios;
+            decimal valorRescate = model.ValorResidual;
+            decimal depreciacionAnual = (costoInicial - valorRescate) / vidaUtil;
+            decimal valorEnLibros = costoInicial;
+
+            for (int periodo = 1; periodo <= vidaUtil; periodo++)
             {
-                ModelState.AddModelError("", "Verifique que N y k sean válidos.");
-                return View(datos);
+                decimal deducibleFiscal = costoInicial * (model.ImpactoFiscal / 100m);
+                decimal valorInicialPeriodo = valorEnLibros;
+                valorEnLibros -= depreciacionAnual;
+
+                if (valorEnLibros < valorRescate)
+                    valorEnLibros = valorRescate;
+
+                resultado.Filas.Add(new ResultadoLineaRectaViewModel.Fila
+                {
+                    NumeroPeriodo = periodo,
+                    ValorInicial = valorInicialPeriodo,
+                    Depreciacion = depreciacionAnual,
+                    ValorFinal = valorEnLibros,
+                    DeducibleFiscal = deducibleFiscal
+                });
             }
 
-            double B = datos.B;
-            double VR = datos.VR;
-            int N = datos.N;
-            int k = datos.k;
-
-            // Cálculo de depreciación por línea recta
-            double depreciacionAnual = (B - VR) / N;
-            double depreciacionAcumulada = depreciacionAnual * k;
-            double valorLibro = B - depreciacionAcumulada;
-
-            ViewBag.Depreciacion = depreciacionAnual;
-            ViewBag.DepreciacionAcumulada = depreciacionAcumulada;
-            ViewBag.ValorLibro = valorLibro;
-
-            return View(datos);
+            return resultado;
         }
+
+        public double[] CalcularDepreciaciones(TipoViewModel model)
+        {
+            decimal costoInicial = model.CostoInicial;
+            int vidaUtil = model.VidaUtilAnios;
+            decimal valorRescate = model.ValorResidual;
+            decimal depreciacionAnual = (costoInicial - valorRescate) / vidaUtil;
+
+            double[] depreciaciones = new double[vidaUtil];
+
+            for (int periodo = 0; periodo < vidaUtil; periodo++)
+            {
+                depreciaciones[periodo] = (double)depreciacionAnual;
+            }
+
+            return depreciaciones;
+        }
+
     }
 }
