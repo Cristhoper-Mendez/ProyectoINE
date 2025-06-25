@@ -1,15 +1,21 @@
+using Microsoft.Extensions.Logging;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configurar logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.SetMinimumLevel(LogLevel.Debug);
+
+// Agregar servicios MVC
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configurar pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -20,8 +26,15 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+// Configuración de rutas específica para UnidadProduccionController
+app.MapControllerRoute(
+    name: "unidadProduccion",
+    pattern: "UnidadProduccion/{action=Index}/{id?}",
+    defaults: new { controller = "UnidadProduccion" });
+
+// Ruta por defecto (redirige a UnidadProduccion/Index)
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=UnidadProduccion}/{action=Index}/{id?}");
 
 app.Run();

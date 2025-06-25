@@ -1,0 +1,333 @@
+@model ProyectoINE.ViewModels.UnidadProduccionViewModel
+@{
+    ViewData["Title"] = "Calculadora de Depreciación - Unidades de Producción";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title mb-0">
+                        <i class="fas fa-calculator me-2"></i>
+                        Método de Depreciación por Unidades de Producción
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Formulario de entrada -->
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Datos del Activo</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="formularioDepreciacion">
+                                        <div class="mb-3">
+                                            <label asp-for="CostoInicial" class="form-label"></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">$</span>
+                                                <input asp-for="CostoInicial" class="form-control" placeholder="50000" />
+                                            </div>
+                                            <span asp-validation-for="CostoInicial" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="ValorRescate" class="form-label"></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">$</span>
+                                                <input asp-for="ValorRescate" class="form-control" placeholder="10000" />
+                                            </div>
+                                            <span asp-validation-for="ValorRescate" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="VidaUtilAnios" class="form-label"></label>
+                                            <input asp-for="VidaUtilAnios" class="form-control" placeholder="5" />
+                                            <span asp-validation-for="VidaUtilAnios" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="UnidadesEstimadas" class="form-label"></label>
+                                            <input asp-for="UnidadesEstimadas" class="form-control" placeholder="30000" />
+                                            <div class="form-text">Unidades totales estimadas (horas, piezas, etc.)</div>
+                                            <span asp-validation-for="UnidadesEstimadas" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="ImpactoFiscal" class="form-label"></label>
+                                            <div class="input-group">
+                                                <input asp-for="ImpactoFiscal" class="form-control" placeholder="25" />
+                                                <span class="input-group-text">%</span>
+                                            </div>
+                                            <span asp-validation-for="ImpactoFiscal" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="DescripcionActivo" class="form-label"></label>
+                                            <textarea asp-for="DescripcionActivo" class="form-control" rows="3" placeholder="Descripción del equipo..."></textarea>
+                                            <span asp-validation-for="DescripcionActivo" class="text-danger"></span>
+                                        </div>
+
+                                        <button type="button" id="btnCalcular" class="btn btn-primary w-100">
+                                            <i class="fas fa-calculator me-2"></i>Calcular Depreciación
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Información del método -->
+                            <div class="card mt-3">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0">Información del Método</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="small mb-2">
+                                        <strong>Fórmula:</strong><br>
+                                        Depreciación por unidad = (Costo - Valor Rescate) / Unidades Estimadas
+                                    </p>
+                                    <p class="small mb-0">
+                                        Este método distribuye el costo del activo basándose en las unidades de producción o uso real.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Resultados -->
+                        <div class="col-lg-8">
+                            <div id="resultados" style="display: none;">
+                                <!-- Resumen -->
+                                <div class="card mb-3">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">Resumen de Cálculos</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="text-center">
+                                                    <h6 class="text-muted mb-1">Depreciación por Unidad</h6>
+                                                    <h4 id="depreciacionPorUnidad" class="text-primary mb-0">$0.00</h4>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="text-center">
+                                                    <h6 class="text-muted mb-1">Total Depreciable</h6>
+                                                    <h4 id="totalDepreciable" class="text-info mb-0">$0.00</h4>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="text-center">
+                                                    <h6 class="text-muted mb-1">Valor Final</h6>
+                                                    <h4 id="valorFinal" class="text-warning mb-0">$0.00</h4>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="text-center">
+                                                    <h6 class="text-muted mb-1">Total Deducible</h6>
+                                                    <h4 id="totalDeducible" class="text-success mb-0">$0.00</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tabla de resultados -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Tabla de Depreciación por Períodos</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover">
+                                                <thead class="table-dark">
+                                                    <tr>
+                                                        <th>Período</th>
+                                                        <th>Valor Inicial</th>
+                                                        <th>Unidades Producidas</th>
+                                                        <th>Depreciación</th>
+                                                        <th>Deducible Fiscal</th>
+                                                        <th>Valor Final</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tablaResultados">
+                                                    <!-- Los resultados se llenarán dinámicamente -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gráfico -->
+                                <div class="card mt-3">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Gráfico de Depreciación</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="graficoDepreciacion" width="400" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Placeholder inicial -->
+                            <div id="placeholder" class="text-center py-5">
+                                <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">Ingrese los datos y presione "Calcular Depreciación"</h5>
+                                <p class="text-muted">Los resultados aparecerán aquí</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let grafico = null;
+
+        document.getElementById('btnCalcular').addEventListener('click', function() {
+            const form = document.getElementById('formularioDepreciacion');
+            const formData = new FormData(form);
+
+            const modelo = {
+                CostoInicial: parseFloat(formData.get('CostoInicial')) || 0,
+                ValorRescate: parseFloat(formData.get('ValorRescate')) || 0,
+                VidaUtilAnios: parseInt(formData.get('VidaUtilAnios')) || 0,
+                UnidadesEstimadas: parseInt(formData.get('UnidadesEstimadas')) || 0,
+                ImpactoFiscal: parseFloat(formData.get('ImpactoFiscal')) || 0,
+                DescripcionActivo: formData.get('DescripcionActivo') || ''
+            };
+
+            // Validaciones básicas
+            if (modelo.CostoInicial <= 0 || modelo.UnidadesEstimadas <= 0 || modelo.VidaUtilAnios <= 0) {
+                alert('Por favor, complete todos los campos obligatorios con valores válidos.');
+                return;
+            }
+
+            if (modelo.ValorRescate >= modelo.CostoInicial) {
+                alert('El valor de rescate debe ser menor al costo inicial.');
+                return;
+            }
+
+            // Llamada al controlador
+            fetch('/UnidadProduccion/Calcular', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(modelo)
+            })
+            .then(response => response.json())
+            .then(data => {
+                mostrarResultados(data, modelo);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al calcular. Por favor, intente nuevamente.');
+            });
+        });
+
+        function mostrarResultados(resultado, modelo) {
+            // Calcular depreciación por unidad
+            const depreciacionPorUnidad = (modelo.CostoInicial - modelo.ValorRescate) / modelo.UnidadesEstimadas;
+            
+            // Actualizar resumen
+            document.getElementById('depreciacionPorUnidad').textContent = '$' + depreciacionPorUnidad.toFixed(2);
+            document.getElementById('totalDepreciable').textContent = '$' + (modelo.CostoInicial - modelo.ValorRescate).toFixed(2);
+            document.getElementById('valorFinal').textContent = '$' + resultado.valorFinalActivo.toFixed(2);
+            document.getElementById('totalDeducible').textContent = '$' + resultado.totalDeducibleFiscal.toFixed(2);
+
+            // Llenar tabla
+            const tbody = document.getElementById('tablaResultados');
+            tbody.innerHTML = '';
+            
+            resultado.filas.forEach(fila => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${fila.numeroPeriodo}</td>
+                    <td>$${fila.valorInicial.toFixed(2)}</td>
+                    <td>${fila.unidadesProducidas.toLocaleString()}</td>
+                    <td>$${fila.depreciacion.toFixed(2)}</td>
+                    <td>$${fila.deducibleFiscal.toFixed(2)}</td>
+                    <td>$${fila.valorFinal.toFixed(2)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Mostrar resultados y ocultar placeholder
+            document.getElementById('placeholder').style.display = 'none';
+            document.getElementById('resultados').style.display = 'block';
+
+            // Crear gráfico
+            crearGrafico(resultado);
+        }
+
+        function crearGrafico(resultado) {
+            const ctx = document.getElementById('graficoDepreciacion').getContext('2d');
+            
+            // Destruir gráfico anterior si existe
+            if (grafico) {
+                grafico.destroy();
+            }
+
+            const labels = resultado.filas.map(f => `Período ${f.numeroPeriodo}`);
+            const valoresFinales = resultado.filas.map(f => f.valorFinal);
+            const depreciaciones = resultado.filas.map(f => f.depreciacion);
+
+            grafico = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Valor del Activo',
+                        data: valoresFinales,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.1
+                    }, {
+                        label: 'Depreciación por Período',
+                        data: depreciaciones,
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        tension: 0.1,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Depreciación por Unidades de Producción'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Valor ($)'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Depreciación ($)'
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+}
