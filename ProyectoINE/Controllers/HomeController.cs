@@ -127,7 +127,7 @@ namespace ProyectoINE.Controllers
 
 
                     var evfiscal = new FiscalCalculatorService();
-                    modeloResultado = evfiscal.GetFiscalMethod(larray, decre_array, syd_array, );
+                    modeloResultado = evfiscal.GetFiscalMethod(larray, decre_array, syd_array );
                     ViewBag.MensajeFiscal = modeloResultado.ToString();
                     vistaDestino = "Index";
                     break;
@@ -152,7 +152,7 @@ namespace ProyectoINE.Controllers
 
 
                     var evCntbl = new FiscalCalculatorService();
-                    modeloResultado = this.CalcularDesviacionEstandarMasBaja(larray2, decre_array2, syd_array2,);
+                    modeloResultado = this.CalcularDesviacionEstandarMasBaja(larray2, decre_array2, syd_array2);
                     ViewBag.MensajeContable = modeloResultado.ToString();
                     vistaDestino = "Index";
                     break;
@@ -179,24 +179,23 @@ namespace ProyectoINE.Controllers
         public string CalcularDesviacionEstandarMasBaja(
             double[] Metodo1, 
             double[] Metodo2,
-            double[] Metodo3, 
-            double[] Metodo4)
+            double[] Metodo3)
         {
             // Validar que los arrays no sean nulos o vacíos
-            if (Metodo1 == null || Metodo2 == null || Metodo3 == null || Metodo4 == null)
+            if (Metodo1 == null || Metodo2 == null || Metodo3 == null )
                 throw new ArgumentNullException("Ningún array puede ser nulo.");
     
-            if (Metodo1.Length == 0 || Metodo2.Length == 0 || Metodo3.Length == 0 || Metodo4.Length == 0)
+            if (Metodo1.Length == 0 || Metodo2.Length == 0 || Metodo3.Length == 0 )
                 throw new ArgumentException("Ningún array puede estar vacío.");
 
             // Calcular desviaciones estándar
             double sd1 = Metodo1.StandardDeviation();
             double sd2 = Metodo2.StandardDeviation();
             double sd3 = Metodo3.StandardDeviation();
-            double sd4 = Metodo4.StandardDeviation();
+          
 
             // Determinar cuál es la menor
-            double minSD = Math.Min(Math.Min(sd1, sd2), Math.Min(sd3, sd4));
+            double minSD = Math.Min(Math.Min(sd1, sd2), sd3);
 
             // Usar switch-case para identificar el método ganador
             string mensaje;
@@ -210,9 +209,6 @@ namespace ProyectoINE.Controllers
                     break;
                 case var _ when minSD == sd3:
                     mensaje = $"Método Suma de los Dígitos de los Años (SYD) tiene la menor desviación estándar: {sd3:N2}";
-                    break;
-                case var _ when minSD == sd4:
-                    mensaje = $"Método Unidad de Producción tiene la menor desviación estándar: {sd4:N2}";
                     break;
                 default:
                     mensaje = "Error inesperado al comparar desviaciones.";
@@ -232,7 +228,6 @@ namespace ProyectoINE.Controllers
             new SelectListItem { Value = "2", Text = "Linea Recta" },
             new SelectListItem { Value = "3", Text = "Saldo Decreciente" },
             new SelectListItem { Value = "4", Text = "Digitos de los anios" },
-            new SelectListItem { Value = "5", Text = "Unidades de produccion" },
             new SelectListItem { Value = "6", Text = "Evaluacion Fiscal" },
             new SelectListItem { Value = "7", Text = "Evaluacion contable" }
         };

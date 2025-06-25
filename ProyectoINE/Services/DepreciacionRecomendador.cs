@@ -23,12 +23,7 @@ public class DepreciacionRecomendador
             valorResidual = 0;
         }
 
-        // **3. Si hay tasa de uso, priorizar Unidades de Producción**
-        if (tasaUso.HasValue && tasaUso > 0)
-        {
-            return MetodoDepreciacion.UnidadesDeProduccion;
-        }
-
+      
         // **4. Evaluación de métodos basados en vida útil y depreciación acelerada**
         bool esVidaUtilCorta = vidaUtilAnios <= 5;
         bool esActivoDeAltoDesgaste = (costoInicial - valorResidual) / vidaUtilAnios > costoInicial * 0.25;
