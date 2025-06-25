@@ -35,5 +35,26 @@ namespace ProyectoINE.Services
                 Datos = datos
             };
         }
+
+        public static double[] CalcularDepreciacionesSYD(DatosSYD datos)
+        {
+            if (datos.N <= 0)
+                throw new ArgumentException("La vida útil (N) debe ser mayor a 0.");
+
+            double B = datos.B;
+            double VR = datos.VR;
+            int N = datos.N;
+
+            double[] depreciaciones = new double[N];
+
+            for (int k = 1; k <= N; k++)
+            {
+                double d_k = (B - VR) * (2.0 * (N - k + 1)) / (N * (N + 1));
+                depreciaciones[k - 1] = d_k;
+            }
+
+            return depreciaciones;
+        }
+
     }
 }

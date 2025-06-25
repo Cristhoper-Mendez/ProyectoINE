@@ -83,6 +83,25 @@
                         <input type="submit" value="Calcular" class="btn btn-success" />
                     </div>
                 </div>
+                <div class="col-md-6">
+                    
+                    @if (ViewBag.MensajeContable != null)
+                    {
+                        <div style="margin-top:10px; color: blue;">
+                            La mejor opción es Contable es:
+                            <br />
+                        </div>
+                        <p>@ViewBag.MensajeContable</p>
+                    }
+                    @if (ViewBag.MensajeFiscal != null)
+                    {
+                        <div style="margin-top:10px; color: blue;">
+                            La mejor opción Fiscal es:
+                            <br />
+                        </div>
+                        <p>@ViewBag.MensajeFiscal</p>
+                    }
+                </div>
             </div>
         </form>
     </div>

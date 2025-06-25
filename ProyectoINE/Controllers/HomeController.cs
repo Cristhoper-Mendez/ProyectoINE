@@ -99,24 +99,68 @@ namespace ProyectoINE.Controllers
                     break;
                 /*case 5:
                     // Método de unidades de producción
-                    break;
+                    break;*/
                 case 6:
                     // Método de evaluación fiscal
-                    
+                    // Array método 1
+                    var lctrl = new LineaRectaController();
+                    decimal[] larray = lctrl.CalcularDepreciaciones(model)
+                        .Select(d => (decimal)d)
+                        .ToArray();
+                    // Array método 2
+                    var decrectrl = new DecreController();
+                    decimal[] decre_array = decrectrl.CalcularDepreciaciones(model)
+                        .Select(d => (decimal)d)
+                        .ToArray();
+                    // Array método 3
+                    var datosSYDservice = new DatosSYD
+                    {
+                        B = (double)model.CostoInicial,
+                        VR = (double)model.ValorResidual,
+                        N = model.VidaUtilAnios,
+                        k = model.TasaUso
+                    };
+                    decimal[] syd_array = SYDService.CalcularDepreciacionesSYD(datosSYDservice)
+                        .Select(d => (decimal)d)
+                        .ToArray();
+                    // Array método 4
+
+
+                    var evfiscal = new FiscalCalculatorService();
+                    modeloResultado = evfiscal.GetFiscalMethod(larray, decre_array, syd_array, );
+                    ViewBag.MensajeFiscal = modeloResultado.ToString();
+                    vistaDestino = "Index";
                     break;
                 case 7:
                     // Método de evaluación contable
-                    break;*/
+                    // Array método 1
+                    var lctrl2 = new LineaRectaController();
+                    double[] larray2 = lctrl2.CalcularDepreciaciones(model);
+                    // Array método 2
+                    var decrectrl2 = new DecreController();
+                    double[] decre_array2 = decrectrl2.CalcularDepreciaciones(model);
+                    // Array método 3
+                    var datosSYDservice2 = new DatosSYD
+                    {
+                        B = (double)model.CostoInicial,
+                        VR = (double)model.ValorResidual,
+                        N = model.VidaUtilAnios,
+                        k = model.TasaUso
+                    };
+                    double[] syd_array2 = SYDService.CalcularDepreciacionesSYD(datosSYDservice2);
+                    // Array método 4
+
+
+                    var evCntbl = new FiscalCalculatorService();
+                    modeloResultado = this.CalcularDesviacionEstandarMasBaja(larray2, decre_array2, syd_array2,);
+                    ViewBag.MensajeContable = modeloResultado.ToString();
+                    vistaDestino = "Index";
+                    break;
 
                 default:
                     model.Items = ObtenerTiposDeDepr();
                     return View("Index", model);
             }
-
-            /* Referebcua oara evaluación fiscal y contable
-            var decreciente2 = new DecreController();
-            double[] decimalArr = decreciente2.CalcularDepreciaciones(model);
-            this.CalcularDesviacionEstandarMasBaja(decimalArr, decimalArr, decimalArr, decimalArr);*/
 
             return View(vistaDestino, modeloResultado);
         }
