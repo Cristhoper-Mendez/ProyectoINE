@@ -57,40 +57,22 @@ namespace ProyectoINE.Controllers
                 /*case 1:
                       // Evaluar el método óptimo
                       break;*/
-                /* case 2:
-                     // Método de línea recta
-                     break;*/
+                case 2:
+                    // Método de línea recta
+                    var lrecta = new LineaRectaController();
+                    modeloResultado = lrecta.Calcular(model);
+                    vistaDestino = "LineaRectaTable";
+                    break;
                 case 3:
-                    Debug.WriteLine("Método de saldos decrecientes");
-
+                    // Método de saldos decrecientes
                     var decreciente = new DecreController();
                     modeloResultado = decreciente.Calcular(model);
                     vistaDestino = "SaldoDecrecienteTable";
                     break;
-                
-                case 4:
+                /*case 4:
                     // Método de suma de los dígitos de los años
-                    var datosSYD = new DatosSYD
-                    {
-                        B = (double)model.CostoInicial,
-                        VR = (double)model.ValorResidual,
-                        N = model.VidaUtilAnios,
-                        k = model.TasaUso
-                    };
-
-                    var resultado = SYDService.Calcular(datosSYD);
-
-                    if (!string.IsNullOrEmpty(resultado.Error))
-                    {
-                        ModelState.AddModelError("", resultado.Error);
-                        model.Items = ObtenerTiposDeDepr();
-                        return View("Index", model);
-                    }
-
-                    vistaDestino = "SYDTable";
-                    modeloResultado = resultado;
-                break;
-                /*case 5:
+                    break;
+                case 5:
                     // Método de unidades de producción
                     break;
                 case 6:
@@ -110,6 +92,7 @@ namespace ProyectoINE.Controllers
             var decreciente2 = new DecreController();
             double[] decimalArr = decreciente2.CalcularDepreciaciones(model);
             this.CalcularDesviacionEstandarMasBaja(decimalArr, decimalArr, decimalArr, decimalArr);*/
+
             return View(vistaDestino, modeloResultado);
         }
 

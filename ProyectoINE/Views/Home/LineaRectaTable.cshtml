@@ -1,0 +1,30 @@
+@using ProyectoINE.Models.ViewModels
+@model ResultadoLineaRectaViewModel
+
+<h2>Depreciación Línea Recta</h2>
+<br />
+<a asp-controller="Home" asp-action="Index" class="btn btn-primary">Volver al Inicio</a>
+<br />
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Valor Inicial</th>
+            <th>Depreciación</th>
+            <th>Valor Final</th>
+            <th>Deducible Fiscal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var fila in Model.Filas)
+        {
+            <tr>
+                <td>@fila.NumeroPeriodo</td>
+                <td>@fila.ValorInicial.ToString("C")</td>
+                <td>@fila.Depreciacion.ToString("C")</td>
+                <td>@fila.ValorFinal.ToString("C")</td>
+                <td>@fila.DeducibleFiscal.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>
