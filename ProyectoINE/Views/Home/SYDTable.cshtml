@@ -1,0 +1,52 @@
+@model dynamic
+
+@{
+    ViewData["Title"] = "Resultado SYD";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Resultado del Método SYD</h2>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Concepto</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Depreciación del año k</td>
+                <td>@Model.Depreciacion.ToString("N2")</td>
+            </tr>
+            <tr>
+                <td>Valor en libros al año k</td>
+                <td>@Model.ValorLibro.ToString("N2")</td>
+            </tr>
+            <tr>
+                <td>Depreciación acumulada</td>
+                <td>@Model.DepreciacionAcumulada.ToString("N2")</td>
+            </tr>
+            <tr>
+                <td>Año (k)</td>
+                <td>@Model.Datos.k</td>
+            </tr>
+            <tr>
+                <td>Vida útil (N)</td>
+                <td>@Model.Datos.N</td>
+            </tr>
+            <tr>
+                <td>Valor de adquisición (B)</td>
+                <td>@Model.Datos.B.ToString("N2")</td>
+            </tr>
+            <tr>
+                <td>Valor residual (VR)</td>
+                <td>@Model.Datos.VR.ToString("N2")</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        <a asp-action="Index" class="btn btn-primary">Volver al inicio</a>
+    </div>
+</div>
