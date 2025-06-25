@@ -48,8 +48,8 @@ namespace ProyectoINE.Controllers
                 return View("Index", model);
             }
 
-            object modeloResultado=null;
-            string vistaDestino=null;
+            object modeloResultado;
+            string vistaDestino;
 
             // Redirigimos al método elegido
             switch (model.SelectedValue)
@@ -67,32 +67,30 @@ namespace ProyectoINE.Controllers
                     modeloResultado = decreciente.Calcular(model);
                     vistaDestino = "SaldoDecrecienteTable";
                     break;
-                // Método de suma de los dígitos de los años
-      case 4:
-    var datosSYD = new DatosSYD
-    {
-        B = (double)model.CostoInicial,
-        VR = (double)model.ValorResidual,
-        N = model.VidaUtilAnios,
-        k = model.TasaUso
-    };
+                
+                case 4:
+                    // Método de suma de los dígitos de los años
+                    var datosSYD = new DatosSYD
+                    {
+                        B = (double)model.CostoInicial,
+                        VR = (double)model.ValorResidual,
+                        N = model.VidaUtilAnios,
+                        k = model.TasaUso
+                    };
 
-    var resultado = SYDService.Calcular(datosSYD);
+                    var resultado = SYDService.Calcular(datosSYD);
 
-    if (!string.IsNullOrEmpty(resultado.Error))
-    {
-        ModelState.AddModelError("", resultado.Error);
-        model.Items = ObtenerTiposDeDepr();
-        return View("Index", model);
-    }
+                    if (!string.IsNullOrEmpty(resultado.Error))
+                    {
+                        ModelState.AddModelError("", resultado.Error);
+                        model.Items = ObtenerTiposDeDepr();
+                        return View("Index", model);
+                    }
 
-    vistaDestino = "SYDTable";
-    modeloResultado = resultado;
-    break;
-
-
-
-                case 5:
+                    vistaDestino = "SYDTable";
+                    modeloResultado = resultado;
+                break;
+                /*case 5:
                     // Método de unidades de producción
                     break;
                 case 6:
@@ -101,7 +99,7 @@ namespace ProyectoINE.Controllers
                     break;
                 case 7:
                     // Método de evaluación contable
-                    break;
+                    break;*/
 
                 default:
                     model.Items = ObtenerTiposDeDepr();
@@ -112,11 +110,6 @@ namespace ProyectoINE.Controllers
             var decreciente2 = new DecreController();
             double[] decimalArr = decreciente2.CalcularDepreciaciones(model);
             this.CalcularDesviacionEstandarMasBaja(decimalArr, decimalArr, decimalArr, decimalArr);*/
-             if (vistaDestino == null || modeloResultado == null)
-                {
-                    model.Items = ObtenerTiposDeDepr();
-                    return View("Index", model);
-                } 
             return View(vistaDestino, modeloResultado);
         }
 
