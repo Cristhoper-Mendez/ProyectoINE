@@ -6,6 +6,8 @@
     ViewData["Favicon"] = "/Yoshis_Egg.ico";
 }
 
+
+
 <h1>Calculadora de depreciación de activos</h1>
 
 <hr />
@@ -85,6 +87,14 @@
         </form>
     </div>
 </div>
+
+@if (ViewBag.AlertMessage != null)
+{
+    <br>
+    <p>Resultado:@ViewBag.AlertMessage</p>
+}
+
+
 
 @section Scripts {
     @{

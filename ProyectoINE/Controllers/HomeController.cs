@@ -17,6 +17,8 @@ namespace ProyectoINE.Controllers
             _logger = logger;
         }
 
+        
+        
         [HttpGet]
         public IActionResult Index()
         {
@@ -50,13 +52,18 @@ namespace ProyectoINE.Controllers
 
             object modeloResultado;
             string vistaDestino;
+            var recomendador = new DepreciacionRecomendador();
 
             // Redirigimos al método elegido
             switch (model.SelectedValue)
             {
-                /*case 1:
-                      // Evaluar el método óptimo
-                      break;*/
+                case 1:
+                    var metodo1 = recomendador.RecomendarMetodo((double?)model.CostoInicial,(double?)model.ValorResidual,model.VidaUtilAnios,model.TasaUso);
+                    Console.WriteLine($"Caso Recomendado: {metodo1.ToString()}");
+                    ViewBag.AlertMessage = metodo1.ToString();
+                    model.Items = ObtenerTiposDeDepr();
+                    return View("Index",model);
+                      break;
                 case 2:
                     // Método de línea recta
                     var lrecta = new LineaRectaController();
